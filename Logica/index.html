@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+	</head>
+	<body>
+		<canvas id="canvas" style="border: 1px solid red" width="1400" height="900"
+			>Canvas not supported</canvas
+		>
+		<!-- <div style="border: 1px solid red; width: 600px; height: 600px" id="target">
+			Hello
+		</div> -->
+		<script src="./index.js"></script>
+		<script>
+			let target = document.getElementById('canvas')
+
+			const canvas = document.getElementById('canvas')
+			const ctx = canvas.getContext('2d')
+			let T = 0
+			let radios = 80
+			let oldTimestamp = 0
+			let secondsPassed = 0
+			const animationSpeed = 1000
+			const angle = 60
+			let X0 = 0
+
+			let Y0 = canvas.height
+			let x = X0
+			let y = Y0
+			let speed = 0.7
+			const g = 0.0005
+			window.onload = init()
+
+			function init() {
+				window.requestAnimationFrame(animiationLoop)
+				let shooter = new Shooter(target, callme)
+				console.log('adding Events')
+				shooter.addListeners()
+			}
+
+			function animiationLoop(timeStamp) {
+				secondsPassed = (timeStamp - oldTimestamp) / 1000
+				oldTimestamp = timeStamp
+				update()
+				draw()
+				window.requestAnimationFrame(animiationLoop)
+			}
+			function update() {
+				T += animationSpeed * secondsPassed
+				x = speed * Math.cos((-angle * Math.PI) / 180) * T + X0
+				y =
+					0.5 * g * T * T + speed * Math.sin((-angle * Math.PI) / 180) * T + Y0
+				radios = radios * 0.99
+			}
+			function draw() {
+				ctx.clearRect(0, 0, canvas.width, canvas.height)
+				ctx.beginPath()
+				ctx.arc(x, y, radios, 0, 2 * Math.PI)
+				ctx.fill()
+			}
+			function callme(result) {
+				console.log({ result })
+			}
+		</script>
+	</body>
+</html>
