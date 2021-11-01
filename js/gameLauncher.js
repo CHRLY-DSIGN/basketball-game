@@ -1,4 +1,4 @@
 window.onload = function() {
-    basicGame.startGame();
+    basicGame.init();
     
 };

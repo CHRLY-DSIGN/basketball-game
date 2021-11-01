@@ -14,6 +14,7 @@ class Shooter {
 		this.timerId = undefined
 		this.posStart = undefined
 		this.posEnd = undefined
+		this.addListeners()
 	}
 	_onHold(e) {
 		this.isHeld = true
@@ -36,9 +37,10 @@ class Shooter {
 		let angle = (Math.asin(deltaY / hipo) * 180) / Math.PI
 
 		this.callback({ hipo, angle, timeElapsed: this.timeElapsed })
-    this.timeElapsed =0;
+		this.timeElapsed = 0
 	}
 	addListeners() {
+		console.log('adding Events..')
 		this.target.addEventListener('pointerdown', (e) => {
 			this._onHold(e)
 		})
