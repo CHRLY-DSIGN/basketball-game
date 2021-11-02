@@ -57,6 +57,7 @@ const basicGame = {
 			this.drawElements()
 			
 			if (this.ball.isShooted) {
+				this.ball.update();
 				this.drawBall()
 			}
 
