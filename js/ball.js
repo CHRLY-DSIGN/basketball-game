@@ -51,8 +51,8 @@ class Ball {
 			this.image,
 			this.pos.x,
 			this.pos.y,
-			this.size.width,
-			this.size.height
+			this.radios,
+			this.radios
 		)
 	}
 
