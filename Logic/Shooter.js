@@ -25,8 +25,8 @@ class Shooter {
 
 	_onHold(e) {
 		this.isHeld = true
-		console.log('onHold  e cordinate : ', e.x, e.y)
 		this.posStart = { x: e.x, y: e.y }
+		console.log('POS START ', this.posStart)
 		this.timerId = setInterval(() => {
 			this.timeElapsed++
 		}, 1)
@@ -40,12 +40,13 @@ class Shooter {
 		this.isDroped = true
 		clearInterval(this.timerId)
 		console.log('OnDrop timeElapesed', this.timeElapsed)
-		console.log('onDrop  e cordinate : ', e.x, e.y)
+		
 		this.posEnd = { x: e.x, y: e.y }
+		console.log('POS END ', this.posEnd)
 		let deltaY = this.posStart.y - this.posEnd.y
 		let deltaX = this.posEnd.x - this.posStart.x
 		let hipo = Math.sqrt(deltaX ** 2 + deltaY ** 2)
-		let angle = (Math.asin(deltaY / hipo) * 180) / Math.PI
+		let angle = this.posStart === this.posEnd ? 0 : (Math.asin(deltaY / hipo) * 180) / Math.PI
 
 		this.callback({ hipo, angle, timeElapsed: this.timeElapsed })
 		this.timeElapsed = 0

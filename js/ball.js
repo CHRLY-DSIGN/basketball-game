@@ -1,10 +1,14 @@
 class Ball {
-    constructor(ctx, posX, posY, width, height) {
+    constructor(canvasDOM, ctx, posX, posY, width, height) {
         this.ctx = ctx
+
+        this.canvasDOM = canvasDOM
     
         this.pos = {
             x : posX,
             y : posY,
+            initialX : 777.57, 
+            initialY: 312,
         } 
 
         
@@ -14,8 +18,31 @@ class Ball {
         }
         
         this.image = undefined
+        
+        this.T = 0
+        
+        this.oldTimestamp = 0
+        
+        this.secondsPassed = 0
+        
+        this.isShooted = false
+
+        this.isEventAdded = false
+
+        this.angle = undefined
+
+        this.radios = 123,26
+        this.initialBallSize = 123,26
+
+        this.speed = undefined
+
+        this.g = 0.3
+
+        this.shooterLogic = new Shooter(this.canvasDOM, this.shoot.bind(this))
+
     
         this.startGame()
+        
       }
 
 
@@ -28,5 +55,42 @@ class Ball {
 
       draw() {
         this.ctx.drawImage(this.image, this.pos.x, this.pos.y, this.size.width, this.size.height)
+      }
+
+
+
+      shoot(res) {
+        console.log(res);
+        this.isShooted = true
+        this.T++
+        this.hipo = res.hipo
+        this.angle = res.angle
+        let timeElapsed = res.timeElapsed
+        this.speed = this.hipo / timeElapsed
+        console.log("this clog shoot",this);
+        this.update();
+        //console.log("shoooteado", this.angle, this.speed);
+      }
+
+
+      update() {
+        
+       this.T += 1
+		    
+        if (this.angle < 40) {
+			      this.angle = this.angle + 20
+		    }
+
+        this.pos.x = (this.speed * Math.cos((-this.angle * Math.PI) / 180) * this.T + this.pos.initialX)
+		    this.pos.y = 0.5 * this.g * this.T ** 2 + 3 * this.speed * Math.sin((-this.angle * Math.PI) / 180) * this.T + this.pos.initialY
+		    
+        let modifier = 1
+		    let deltaX = this.pos.x - this.pos.initialX
+		
+        modifier = modifier + deltaX / 500
+		
+        if (modifier <= 2) {
+			  this.radios = this.initialBallSize / modifier
+		    }
       }
 }
