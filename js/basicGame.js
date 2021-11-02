@@ -58,6 +58,11 @@ const basicGame = {
 			if (T !== 0) {
 				this.update()
 			}
+			if (this.isCollisionBoard()) {
+				console.log("collision")
+			};
+
+
 		}, 1000 / this.FPS)
 		this.framesCounter > 50 ? clearInterval(this.intervalId) : null
 	},
@@ -77,9 +82,9 @@ const basicGame = {
 		let variator = 1
 		let deltaX = x - X0
 		variator = variator + deltaX / 500
-		console.log('DeltaX :', deltaX)
+		// console.log('DeltaX :', deltaX)
 		if (variator <= 2) {
-			console.log('variator:', variator)
+			// console.log('variator:', variator)
 			radios = initialBallSize / variator
 		}
 	},
@@ -114,6 +119,7 @@ const basicGame = {
 		//this.createBall()
 		this.createPlayer()
 		this.createBallStand()
+		this.createCollisionBoard();
 	},
 
 	drawBallTest() {
@@ -121,6 +127,9 @@ const basicGame = {
 		this.circleImg = new Image()
 		this.circleImg.src = '../IMAGES/basketball_game_ball.png'
 		this.ctx.drawImage(this.circleImg, x / 2.15, y / 3, radios, radios)
+		this.circleImg.x = x;
+		this.circleImg.y = y;
+		this.circleImg.radios = radios;
 
 		/* this.ctx.globalCompositeOperation='destination-in';
 		this.ctx.beginPath()
@@ -182,5 +191,29 @@ const basicGame = {
 			this.canvasSize.height
 		)
 		this.ballStand.draw()
+	},
+
+
+	createCollisionBoard() {
+		this.collisionBoard = new CollisionBoard(this.ctx, (this.canvasSize.width / 2) + 274, (this.canvasSize.height / 2) -680 / 2, 14, 160)
+		this.collisionBoard.draw();
+	},
+
+
+
+	isCollisionBoard() {
+    
+    // console.log("this.colisionboard :",this.collisionBoard)
+    // console.log("this :",this)
+		
+	return (
+		this.circleImg.x + this.circleImg.radios > this.collisionBoard.pos.x && //lado drch del circleImg lado izq del this.collisionBoard
+		this.circleImg.x < this.collisionBoard.pos.x + this.collisionBoard.size.width &&         //lado izq del circleImg lado drch del this.collisionBoard
+		this.circleImg.y + this.circleImg.radios > this.collisionBoard.pos.y && //lado de abajo del circleImg lado de arriba del this.collisionBoard
+		this.circleImg.y < this.collisionBoard.pos.y + this.collisionBoard.size.height       //lado de arriba del circleImg lado de abajo del this.collisionBoard
+	  )
+	
+	 
+  
 	},
 }
