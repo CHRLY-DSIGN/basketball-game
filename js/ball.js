@@ -37,6 +37,7 @@ class Ball {
 		this.g = 0.3
 
 		this.shooterLogic = new Shooter(this.canvasDOM, this.shoot.bind(this))
+	
 
 		this.startGame()
 	}
@@ -47,6 +48,8 @@ class Ball {
 	}
 
 	draw() {
+
+		
 		this.ctx.drawImage(
 			this.image,
 			this.pos.x,
@@ -54,6 +57,7 @@ class Ball {
 			this.radios,
 			this.radios
 		)
+		
 	}
 
 	shoot(res) {
