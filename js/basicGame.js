@@ -1,10 +1,10 @@
 let T = 0
-let radios = 80
+let radios = 63
 let oldTimestamp = 0
 let secondsPassed = 0
 const animationSpeed = 40
 let angle = 0
-let X0 = 200
+let X0 = window.innerWidth 
 let Y0 = window.innerHeight
 let y = Y0
 let x = X0
@@ -12,6 +12,10 @@ let speed = 0
 let hipo = 0
 let timeElapsed = 0
 const g = 0.3
+
+
+
+
 const basicGame = {
 	ctx: undefined,
 	canvasDOM: undefined,
@@ -22,6 +26,10 @@ const basicGame = {
 	points: 0,
 	player: undefined,
 	shooterLogic: undefined,
+	
+	
+	
+	
 	init() {
 		console.log('funciono')
 		this.setContext()
@@ -33,10 +41,16 @@ const basicGame = {
 		this.start()
 	},
 
+
+
+
 	setContext() {
 		this.canvasDOM = document.querySelector('#myCanvas')
 		this.ctx = this.canvasDOM.getContext('2d')
 	},
+
+
+
 
 	setDimensions() {
 		this.canvasSize.width = window.innerWidth
@@ -45,6 +59,9 @@ const basicGame = {
 		this.canvasDOM.setAttribute('width', this.canvasSize.width)
 		this.canvasDOM.setAttribute('height', this.canvasSize.height)
 	},
+
+
+
 
 	start() {
 		this.intervalId = setInterval(() => {
@@ -58,18 +75,32 @@ const basicGame = {
 		}, 1000 / this.FPS)
 		this.framesCounter > 50 ? clearInterval(this.intervalId) : null
 	},
+
+
+
+
 	update() {
 		console.log('Updating ...')
 		T += 1
 		console.log('speed:', speed)
 		console.log('angle :', angle)
 
+		if (angle < 40) {
+			angle = angle +20
+		}
+
 		x = speed * Math.cos((-angle * Math.PI) / 180) * T + X0
-		y =
-			0.5 * g * T ** 2 + 3 * speed * Math.sin((-angle * Math.PI) / 180) * T + Y0
-		radios = radios * 0.9989
+		y = 0.5 * g * T ** 2 + 3 * speed * Math.sin((-angle * Math.PI) / 180) * T + Y0
+		//radios = radios * 0.994
+		if (radios > 35) {
+			radios = radios * 0.991
+		}
+		
 		console.log('printing Circle cordination : ', x, y)
 	},
+
+
+
 	shoot(res) {
 		console.log('Shooted')
 		T++
@@ -84,28 +115,51 @@ const basicGame = {
 			timeElapsed
 		)
 	},
+
+
+
 	clearScreen() {
 		this.ctx.clearRect(0, 0, this.canvasSize.width, this.canvasSize.height)
 	},
+
+
+
 
 	gameOver() {
 		clearInterval(this.intervalId)
 	},
 
+
+
+
 	drawElements() {
 		this.createBackground()
 		this.createBasket()
-		this.createBall()
+		this.drawBallTest()
+		//this.createBall()
 		this.createPlayer()
 		this.createBallStand()
-		this.drawBallTest()
 	},
+
+
+
 	drawBallTest() {
 		// console.log('Drawing ...X,y', x, y)
+		this.circleImg = new Image();
+		this.circleImg.src = '../IMAGES/basketball_game_ball.png'
+		this.ctx.drawImage(this.circleImg, x/2.15, y/3, x/13.5, x/13.5 )
+		
+		
+		
+		/* this.ctx.globalCompositeOperation='destination-in';
 		this.ctx.beginPath()
 		this.ctx.arc(x, y, radios, 0, 2 * Math.PI)
-		this.ctx.fill()
+		this.ctx.fill() */
+		
 	},
+
+
+
 	createBackground() {
 		this.background = new Background(
 			this.ctx,
@@ -116,6 +170,9 @@ const basicGame = {
 		)
 		this.background.draw()
 	},
+
+
+
 
 	createBasket() {
 		this.basket = new BasketStandar(
@@ -128,6 +185,9 @@ const basicGame = {
 		this.basket.draw()
 	},
 
+
+
+
 	createPlayer() {
 		this.player = new Player(
 			this.ctx,
@@ -138,6 +198,9 @@ const basicGame = {
 		)
 		this.player.draw()
 	},
+
+
+
 
 	createBall() {
 		/* this.ball = new Ball(this.ctx, 780, 320, this.canvasSize.width/13.54, this.canvasSize.height/7.62); */
@@ -150,6 +213,9 @@ const basicGame = {
 		)
 		this.ball.draw()
 	},
+
+
+
 
 	createBallStand() {
 		this.ballStand = new BallStand(

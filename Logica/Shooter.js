@@ -4,6 +4,9 @@ class Shooter {
 	 * @param {EventTarget} htmlElm The HTML elemnt to apply the event
 	 * @param {Function} callback  The function to run once the target is Clicked and draged and droped.
 	 */
+	
+	
+	
 	constructor(htmlElm, callback) {
 		this.target = htmlElm
 
@@ -16,6 +19,10 @@ class Shooter {
 		this.posEnd = undefined
 		this.addListeners()
 	}
+
+
+
+
 	_onHold(e) {
 		this.isHeld = true
 		console.log('onHold  e cordinate : ', e.x, e.y)
@@ -24,6 +31,10 @@ class Shooter {
 			this.timeElapsed++
 		}, 1)
 	}
+
+
+
+
 	_OnDrop(e) {
 		this.isHeld = false
 		this.isDroped = true
@@ -39,6 +50,10 @@ class Shooter {
 		this.callback({ hipo, angle, timeElapsed: this.timeElapsed })
 		this.timeElapsed = 0
 	}
+
+
+
+
 	addListeners() {
 		console.log('adding Events..')
 		this.target.addEventListener('pointerdown', (e) => {
