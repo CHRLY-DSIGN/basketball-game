@@ -11,6 +11,7 @@ const basicGame = {
 	isGonnaCollide: false,
 	collided: false,
 	collidedBoard: false,
+	collidedBasketLeft: false,
 
 	init() {
 		this.setContext()
@@ -45,7 +46,9 @@ const basicGame = {
 					this.animateCollisionFloor()
 				} else if (this.collidedBoard){
 					this.animationCollisionBoard()
-				}else {
+				} else if (this.collidedBasketLeft){
+					this.animationCollisionBasketLeft()
+				} else {
 					this.ball.update()
 				}
 				this.drawBall()
@@ -55,23 +58,24 @@ const basicGame = {
 			this.drawBallStand()
 
 			if (this.isCollisionBoard()) {
-				console.log('collision board')
+				//console.log('collision board')
 				this.collidedBoard = true
 				
 			}
 
 			if (this.isCollisionBasketLeft()) {
-				console.log('collision basket left')
+				//console.log('collision basket left')
+				this.collidedBasketLeft = true
 			}
 
 			if (this.isCollisionBasketRight()) {
-				console.log('collision basket right')
+				console.log('GOAAAAAAALLLLLL ---------------------')
 			}
 
 			if (this.isCollisionFloor()) {
 				this.collided = true
 
-				console.log('collision floor')
+				/* console.log('collision floor') */
 			}
 		}, 1000 / this.FPS)
 		this.framesCounter > 50 ? clearInterval(this.intervalId) : null
@@ -110,13 +114,7 @@ const basicGame = {
 	},
 
 	createBackground() {
-		this.background = new Background(
-			this.ctx,
-			0,
-			0,
-			this.canvasSize.width,
-			this.canvasSize.height
-		)
+		this.background = new Background(this.ctx, 0, 0, this.canvasSize.width, this.canvasSize.height)
 	},
 
 	drawBackground() {
@@ -124,13 +122,7 @@ const basicGame = {
 	},
 
 	createBasket() {
-		this.basket = new BasketStandar(
-			this.ctx,
-			0,
-			0,
-			this.canvasSize.width,
-			this.canvasSize.height
-		)
+		this.basket = new BasketStandar(this.ctx, 0, 0, this.canvasSize.width, this.canvasSize.height)
 	},
 
 	drawBasket() {
@@ -138,13 +130,7 @@ const basicGame = {
 	},
 
 	createPlayer() {
-		this.player = new Player(
-			this.ctx,
-			0,
-			0,
-			this.canvasSize.width,
-			this.canvasSize.height
-		)
+		this.player = new Player(this.ctx, 0, 0, this.canvasSize.width, this.canvasSize.height)
 	},
 
 	drawPlayer() {
@@ -159,13 +145,7 @@ const basicGame = {
 	},
 
 	createBall() {
-		this.ball = new Ball(
-			this.canvasDOM,
-			this.ctx,
-			this.ballInitialX,
-			this.ballInitialY,
-			this.ballInitialWidth
-		)
+		this.ball = new Ball(this.canvasDOM, this.ctx, this.ballInitialX, this.ballInitialY, this.ballInitialWidth)
 	},
 
 	drawBall() {
@@ -174,13 +154,7 @@ const basicGame = {
 	},
 
 	createBallStand() {
-		this.ballStand = new BallStand(
-			this.ctx,
-			0,
-			0,
-			this.canvasSize.width,
-			this.canvasSize.height
-		)
+		this.ballStand = new BallStand(this.ctx, 0, 0, this.canvasSize.width, this.canvasSize.height)
 	},
 
 	drawBallStand() {
@@ -189,7 +163,7 @@ const basicGame = {
 
 
 	createCollisionBoard() {
-		this.collisionBoard = new CollisionBoard(this.ctx, 1103, 135, 12, 150)
+		this.collisionBoard = new CollisionBoard(this.ctx, 1110, 152, 12, 120)
 	},
 
 
@@ -200,22 +174,15 @@ const basicGame = {
 
 	isCollisionBoard() {
 		return (
-			this.ball.pos.x - 30 + this.ball.size.width > this.collisionBoard.pos.x && //lado drch del ball lado izq del this.collisionBoard
-			this.ball.pos.x <
-				this.collisionBoard.pos.x + this.collisionBoard.size.width && //lado izq del ball lado drch del this.collisionBoard
-			this.ball.pos.y + this.ball.size.height > this.collisionBoard.pos.y //lado de abajo del ball lado de arriba del this.collisionBoard
+			this.ball.pos.x - 30 + this.ball.size.width-40 > this.collisionBoard.pos.x && //lado drch del ball lado izq del this.collisionBoard
+			this.ball.pos.x < this.collisionBoard.pos.x + this.collisionBoard.size.width && //lado izq del ball lado drch del this.collisionBoard
+			this.ball.pos.y + this.ball.size.height-40 > this.collisionBoard.pos.y //lado de abajo del ball lado de arriba del this.collisionBoard
 		)
 	},
 
 
 	createCollisionBasketLeft() {
-		this.collisionBasketLeft = new CollisionBasketLeft(
-			this.ctx,
-			980,
-			260,
-			12,
-			12
-		)
+		this.collisionBasketLeft = new CollisionBasketLeft(this.ctx, 980, 260, 12, 12)
 	},
 
 
@@ -225,26 +192,18 @@ const basicGame = {
 
 
 	isCollisionBasketLeft() {
+		
 		return (
-			this.ball.pos.x + this.ball.size.width > this.collisionBasketLeft.pos.x && //lado drch del ball lado izq del this.collisionBasketLeft
-			this.ball.pos.x <
-				this.collisionBasketLeft.pos.x + this.collisionBasketLeft.size.width && //lado izq del ball lado drch del this.collisionBasketLeft
-			this.ball.pos.y + this.ball.size.height >
-				this.collisionBasketLeft.pos.y && //lado de abajo del ball lado de arriba del this.collisionBasketLeft
-			this.ball.pos.y <
-				this.collisionBasketLeft.pos.y + this.collisionBasketLeft.size.height
+			this.ball.pos.x + this.ball.radios > this.collisionBasketLeft.pos.x && //lado drch del ball lado izq del this.collisionBasketLeft
+			this.ball.pos.x < this.collisionBasketLeft.pos.x + this.collisionBasketLeft.size.width && //lado izq del ball lado drch del this.collisionBasketLeft
+			this.ball.pos.y + this.ball.radios  > this.collisionBasketLeft.pos.y && //lado de abajo del ball lado de arriba del this.collisionBasketLeft
+			this.ball.pos.y <  this.collisionBasketLeft.pos.y + this.collisionBasketLeft.size.height  //laddo de arriba del ball, lado de abajo del objeto
 		)
 	},
 
 
 	createCollisionBasketRight() {
-		this.collisionBasketRight = new CollisionBasketRight(
-			this.ctx,
-			1080,
-			260,
-			12,
-			12
-		)
+		this.collisionBasketRight = new CollisionBasketRight(this.ctx, 1000, 260, 100, 5)
 	},
 
 
@@ -254,16 +213,12 @@ const basicGame = {
 
 
 	isCollisionBasketRight() {
+
 		return (
-			this.ball.pos.x + this.ball.size.width >
-				this.collisionBasketRight.pos.x && //lado drch del ball lado izq del this.collisionBasketRight
-			this.ball.pos.x <
-				this.collisionBasketRight.pos.x +
-					this.collisionBasketRight.size.width && //lado izq del ball lado drch del this.collisionBasketRight
-			this.ball.pos.y + this.ball.size.height >
-				this.collisionBasketRight.pos.y && //lado de abajo del ball lado de arriba del this.collisionBasketRight
-			this.ball.pos.y <
-				this.collisionBasketRight.pos.y + this.collisionBasketRight.size.height
+			this.ball.pos.x + this.ball.size.width > this.collisionBasketRight.pos.x && //lado drch del ball lado izq del this.collisionBasketRight
+			this.ball.pos.x < this.collisionBasketRight.pos.x + this.collisionBasketRight.size.width && //lado izq del ball lado drch del this.collisionBasketRight
+			this.ball.pos.y + this.ball.size.height > this.collisionBasketRight.pos.y && //lado de abajo del ball lado de arriba del this.collisionBasketRight
+			this.ball.pos.y < this.collisionBasketRight.pos.y + this.collisionBasketRight.size.height
 		)
 	},
 
@@ -312,13 +267,7 @@ const basicGame = {
 
 
 	createBounceAnimationBall(actualX,actualY,actualRadios) {
-		this.ballBounceAnimation = new Ball(
-			this.canvasDOM,
-			this.ctx,
-			actualX,
-			actualY,
-			actualRadios,
-		)
+		this.ballBounceAnimation = new Ball(this.canvasDOM, this.ctx, actualX, actualY, actualRadios)
 
 	},
 
@@ -334,5 +283,25 @@ const basicGame = {
 		let actualY = + this.ball.pos.y.toString()
 		
 		this.ball.droppingBall(actualX, actualY)
-	}
+	},
+
+
+	animationCollisionBasketLeft() {
+
+		let actualX = + this.ball.pos.x.toString()
+		let actualY = + this.ball.pos.y.toString()
+		
+		this.ball.droppingBall(actualX, actualY)
+
+	},
+
+
+	/* isGoal() {
+		return (
+			this.ball.pos.x + this.ball.size.width > this.collisionBoard.pos.x && //lado drch del ball lado izq del this.collisionBasketRight
+			this.ball.pos.x < this.collisionBasketLeft.pos.x + this.collisionBasketLeft.size.width && //lado izq del ball lado drch del this.collisionBasketRight
+			this.ball.pos.y + this.ball.size.height > this.collisionBasketLeft.pos.y && //lado de abajo del ball lado de arriba del this.collisionBasketRight
+			this.ball.pos.y < this.collisionBasketLeft.pos.y + this.collisionBasketLeft.size.height
+		)
+	} */
 }

@@ -89,9 +89,9 @@ class Ball {
 		let modifier = 1
 		let deltaX = this.pos.x - this.pos.initialX
 
-		modifier = modifier + deltaX / 500
+		modifier = modifier + deltaX / 250
 
-		if (modifier <= 2) {
+		if (modifier <= 5) {
 			this.radios = this.initialBallSize / modifier
 		}
 	}
