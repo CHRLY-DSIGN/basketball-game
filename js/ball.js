@@ -29,8 +29,8 @@ class Ball {
 		this.isEventAdded = false
 
 		this.angle = undefined
-		;(this.radios = 123), 26
-		;(this.initialBallSize = 123), 26
+		this.radios = 123.26
+		this.initialBallSize = 123.26
 
 		this.speed = undefined
 

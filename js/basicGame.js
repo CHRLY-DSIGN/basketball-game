@@ -24,6 +24,7 @@ const basicGame = {
 	points: 0,
 	player: undefined,
 	shooterLogic: undefined,
+	isGonnaCollide : false,
 
 	init() {
 		//console.log('funciono')
@@ -58,7 +59,11 @@ const basicGame = {
 			this.drawElements()
 
 			if (this.ball.isShooted) {
-				this.ball.update()
+				
+				if(!this.isGonnaCollide){
+					this.ball.update()
+				}
+				this.assignedIsGonnaCollide()
 				this.drawBall()
 			}
 
@@ -82,8 +87,9 @@ const basicGame = {
 			};
 
 			if (this.isCollisionFloor()) {
+				this.assignedIsGonnaCollide()
 				console.log("collision floor")
-				this.ball.speed *= -1.01
+				//this.ball.speed *= -1.01
 			};
 
 
@@ -337,5 +343,28 @@ const basicGame = {
 			this.ball.pos.y + this.ball.size.height > this.collisionFloor.pos.y //lado de abajo del ball lado de arriba del this.collisionFloor
 
 		)
+	},
+
+
+	assignedIsGonnaCollide() {
+		if (this.ball.radios < 90){
+			this.isGonnaCollide = true
+		} else {
+			this.isGonnaCollide = false
+		}
+	},
+
+
+	animateCollisionFloor() {
+
+		/* this.ball.pos.y =
+			0.5 * this.ball.g * this.ball.T ** 2 +
+			3 * this.ball.speed * Math.sin((-this.ball.angle * Math.PI) / 180) * this.ball.T +
+			this.ball.pos.initialY */
+
+		console.log("animacion parado//////////////////////////////////");
+
+		
+
 	},
 }
