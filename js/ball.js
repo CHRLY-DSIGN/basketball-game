@@ -77,20 +77,14 @@ class Ball {
 	}
 
 	update() {
+		
 		console.log('Updating..')
-		this.T += 1
 
 		if (this.angle < 40) {
 			this.angle = this.angle + 20
 		}
 
-		this.pos.x =
-			this.speed * Math.cos((-this.angle * Math.PI) / 180) * this.T +
-			this.pos.initialX
-		this.pos.y =
-			0.5 * this.g * this.T ** 2 +
-			3 * this.speed * Math.sin((-this.angle * Math.PI) / 180) * this.T +
-			this.pos.initialY
+		this.move(this.speed, this.angle, this.pos.initialX, this.pos.initialY)
 
 		let modifier = 1
 		let deltaX = this.pos.x - this.pos.initialX

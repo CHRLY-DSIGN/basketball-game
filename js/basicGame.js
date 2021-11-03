@@ -53,6 +53,8 @@ const basicGame = {
 
 			if (this.isCollisionBoard()) {
 				console.log('collision board')
+				/* this.ball.speed *=-1
+				console.log(this.ball); */
 			}
 
 			if (this.isCollisionBasketLeft()) {
@@ -291,16 +293,6 @@ const basicGame = {
 
 	animateCollisionFloor() {
 		
-		/* this.ball.T += 1
-
-		this.ball.pos.x =
-			this.ball.speed * Math.cos((-this.ball.angle * Math.PI) / 180) * this.ball.T +
-			this.ball.pos.initialX
-		
-		
-		this.ball.pos.y = 0.5 * this.ball.g * this.ball.T ** 2 +3 * this.ball.speed * Math.sin((-this.ball.angle * Math.PI) / 180) * this.ball.T +this.ball.pos.initialY */
-
-
 		this.ball.visible = false;
 
 		let actualX = + this.ball.pos.x.toString()
