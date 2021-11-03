@@ -43,16 +43,13 @@ const basicGame = {
 				if (!this.collided) {
 					this.ball.update()
 				} else {
-					this.assigneIsGonnaCollide()
+					this.animateCollisionFloor()
 				}
 				this.drawBall()
 			}
 
 			this.drawPlayer()
 			this.drawBallStand()
-			/* if (T !== 0) {
-				this.update()
-			} */
 
 			if (this.isCollisionBoard()) {
 				console.log('collision board')
@@ -87,7 +84,6 @@ const basicGame = {
 		this.createBackground()
 		this.createBasket()
 		this.createBall()
-		//this.drawBallTest()
 		this.createPlayer()
 		this.createBallStand()
 		this.createCollisionBoard()
@@ -100,7 +96,6 @@ const basicGame = {
 		this.drawBackground()
 		this.drawBasket()
 		this.drawBall()
-		//this.drawBallTest()
 		this.drawPlayer()
 		this.drawBallStand()
 		this.drawCollisionBoard()
@@ -164,8 +159,7 @@ const basicGame = {
 			this.ctx,
 			this.ballInitialX,
 			this.ballInitialY,
-			this.ballInitialWidth,
-			this.ballInitialHeight
+			this.ballInitialWidth
 		)
 	},
 
@@ -188,13 +182,16 @@ const basicGame = {
 		this.ballStand.draw()
 	},
 
+
 	createCollisionBoard() {
 		this.collisionBoard = new CollisionBoard(this.ctx, 1103, 135, 12, 150)
 	},
 
+
 	drawCollisionBoard() {
 		this.collisionBoard.draw()
 	},
+
 
 	isCollisionBoard() {
 		return (
@@ -204,6 +201,7 @@ const basicGame = {
 			this.ball.pos.y + this.ball.size.height > this.collisionBoard.pos.y //lado de abajo del ball lado de arriba del this.collisionBoard
 		)
 	},
+
 
 	createCollisionBasketLeft() {
 		this.collisionBasketLeft = new CollisionBasketLeft(
@@ -215,9 +213,11 @@ const basicGame = {
 		)
 	},
 
+
 	drawCollisionBasketLeft() {
 		this.collisionBasketLeft.draw()
 	},
+
 
 	isCollisionBasketLeft() {
 		return (
@@ -231,6 +231,7 @@ const basicGame = {
 		)
 	},
 
+
 	createCollisionBasketRight() {
 		this.collisionBasketRight = new CollisionBasketRight(
 			this.ctx,
@@ -241,9 +242,11 @@ const basicGame = {
 		)
 	},
 
+
 	drawCollisionBasketRight() {
 		this.collisionBasketRight.draw()
 	},
+
 
 	isCollisionBasketRight() {
 		return (
@@ -259,19 +262,23 @@ const basicGame = {
 		)
 	},
 
+
 	createCollisionFloor() {
 		this.collisionFloor = new CollisionFloor(this.ctx, 0, 615, 1664, 12)
 	},
+
 
 	drawCollisionFloor() {
 		this.collisionFloor.draw()
 	},
 
+
 	isCollisionFloor() {
 		return (
-			this.ball.pos.y + this.ball.size.height > this.collisionFloor.pos.y //lado de abajo del ball lado de arriba del this.collisionFloor
+			this.ball.pos.y + this.ball.size.height-40 > this.collisionFloor.pos.y //lado de abajo del ball lado de arriba del this.collisionFloor
 		)
 	},
+
 
 	assigneIsGonnaCollide() {
 		if (this.ball.radios < 90) {
@@ -281,12 +288,47 @@ const basicGame = {
 		}
 	},
 
-	animateCollisionFloor() {
-		/* this.ball.pos.y =
-			0.5 * this.ball.g * this.ball.T ** 2 +
-			3 * this.ball.speed * Math.sin((-this.ball.angle * Math.PI) / 180) * this.ball.T +
-			this.ball.pos.initialY */
 
-		console.log('animacion parado--------------------------------')
+	animateCollisionFloor() {
+		
+		/* this.ball.T += 1
+
+		this.ball.pos.x =
+			this.ball.speed * Math.cos((-this.ball.angle * Math.PI) / 180) * this.ball.T +
+			this.ball.pos.initialX
+		
+		
+		this.ball.pos.y = 0.5 * this.ball.g * this.ball.T ** 2 +3 * this.ball.speed * Math.sin((-this.ball.angle * Math.PI) / 180) * this.ball.T +this.ball.pos.initialY */
+
+
+		this.ball.visible = false;
+
+		let actualX = + this.ball.pos.x.toString()
+		let actualY = + this.ball.pos.y.toString()
+		let actualRadios = +this.ball.radios.toString()
+		
+		
+		if (!this.ballBounceAnimation) {
+			this.createBounceAnimationBall(actualX,actualY,actualRadios)
+		}
+		this.ballBounceAnimation.move(this.ball.speed, this.ball.angle, actualX, actualY)
+		this.ballBounceAnimation.draw()
 	},
+
+
+	createBounceAnimationBall(actualX,actualY,actualRadios) {
+		this.ballBounceAnimation = new Ball(
+			this.canvasDOM,
+			this.ctx,
+			actualX,
+			actualY,
+			actualRadios,
+		)
+
+	},
+
+
+	moveBounceAnimationBall(speed,angle, actualX, actualY){
+		this.ballBounceAnimation.move(speed,angle, actualX, actualY)
+	}
 }

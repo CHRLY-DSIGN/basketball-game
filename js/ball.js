@@ -1,5 +1,5 @@
 class Ball {
-	constructor(canvasDOM, ctx, posX, posY, width, height) {
+	constructor(canvasDOM, ctx, posX, posY, radios = 123.26) {
 		this.ctx = ctx
 
 		this.canvasDOM = canvasDOM
@@ -12,8 +12,8 @@ class Ball {
 		}
 
 		this.size = {
-			width: width,
-			height: height,
+			width: radios,
+			height: radios,
 		}
 
 		this.image = undefined
@@ -25,18 +25,20 @@ class Ball {
 		this.secondsPassed = 0
 
 		this.isShooted = false
+		this.radios = radios
+		this.initialBallSize = 123.26
 
 		this.isEventAdded = false
 
 		this.angle = undefined
-		this.radios = 123.26
-		this.initialBallSize = 123.26
 
 		this.speed = undefined
 
 		this.g = 0.3
 
 		this.shooterLogic = new Shooter(this.canvasDOM, this.shoot.bind(this))
+
+		this.visible = true
 	
 
 		this.startGame()
@@ -49,14 +51,15 @@ class Ball {
 
 	draw() {
 
-		
-		this.ctx.drawImage(
-			this.image,
-			this.pos.x,
-			this.pos.y,
-			this.radios,
-			this.radios
-		)
+		if (this.visible) {
+			this.ctx.drawImage(
+				this.image,
+				this.pos.x,
+				this.pos.y,
+				this.radios,
+				this.radios
+			)
+		}
 		
 	}
 
@@ -97,6 +100,20 @@ class Ball {
 		if (modifier <= 2) {
 			this.radios = this.initialBallSize / modifier
 		}
+	}
+
+
+	move(speed, angle, initialX, initialY) {
+
+		this.T ++
+	
+		this.pos.x =
+			speed * Math.cos((-angle * Math.PI) / 180) * this.T +
+			initialX
+		this.pos.y =
+			0.5 * this.g * this.T ** 2 +
+			3 * speed * Math.sin((-angle * Math.PI) / 180) * this.T +
+			initialY
 	}
 
 }
