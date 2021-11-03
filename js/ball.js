@@ -110,4 +110,13 @@ class Ball {
 			initialY
 	}
 
+
+
+	droppingBall(x, y) {
+		this.T ++
+
+		this.pos.x -=  this.T/10 
+		this.pos.y += this.T  * this.g * 0.5
+	}
+
 }

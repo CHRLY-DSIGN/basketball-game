@@ -10,6 +10,7 @@ const basicGame = {
 	shooterLogic: undefined,
 	isGonnaCollide: false,
 	collided: false,
+	collidedBoard: false,
 
 	init() {
 		this.setContext()
@@ -40,10 +41,12 @@ const basicGame = {
 			this.drawElements()
 
 			if (this.ball.isShooted) {
-				if (!this.collided) {
-					this.ball.update()
-				} else {
+				if (this.collided) {
 					this.animateCollisionFloor()
+				} else if (this.collidedBoard){
+					this.animationCollisionBoard()
+				}else {
+					this.ball.update()
 				}
 				this.drawBall()
 			}
@@ -53,8 +56,8 @@ const basicGame = {
 
 			if (this.isCollisionBoard()) {
 				console.log('collision board')
-				/* this.ball.speed *=-1
-				console.log(this.ball); */
+				this.collidedBoard = true
+				
 			}
 
 			if (this.isCollisionBasketLeft()) {
@@ -322,5 +325,14 @@ const basicGame = {
 
 	moveBounceAnimationBall(speed,angle, actualX, actualY){
 		this.ballBounceAnimation.move(speed,angle, actualX, actualY)
+	},
+
+
+	animationCollisionBoard() {
+		
+		let actualX = + this.ball.pos.x.toString()
+		let actualY = + this.ball.pos.y.toString()
+		
+		this.ball.droppingBall(actualX, actualY)
 	}
 }
