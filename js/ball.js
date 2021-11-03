@@ -98,4 +98,5 @@ class Ball {
 			this.radios = this.initialBallSize / modifier
 		}
 	}
+
 }

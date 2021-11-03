@@ -83,6 +83,7 @@ const basicGame = {
 
 			if (this.isCollisionFloor()) {
 				console.log("collision floor")
+				this.ball.speed *= -1.01
 			};
 
 
