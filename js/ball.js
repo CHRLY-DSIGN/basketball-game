@@ -40,25 +40,30 @@ class Ball {
 
 		this.visible = true
 	
+		this.spritePosX = 0
 
 		this.startGame()
+
 	}
 
 	startGame() {
+		/* this.image = new Image()
+		this.image.src = '../IMAGES/basketball_game_ball.png' */
+
 		this.image = new Image()
-		this.image.src = '../IMAGES/basketball_game_ball.png'
+		this.image.src = '../IMAGES/BASKETBAL_BALL_SPRITE_189.png'
+
+		if (!this.isShooted) {
+			this.spritePosX = 0
+		}
+
 	}
-
+	
 	draw() {
-
+		
 		if (this.visible) {
-			this.ctx.drawImage(
-				this.image,
-				this.pos.x,
-				this.pos.y,
-				this.radios,
-				this.radios
-			)
+			//this.ctx.drawImage(this.image, this.pos.x, this.pos.y, this.radios, this.radios)
+			this.drawSprite()
 		}
 		
 	}
@@ -94,12 +99,15 @@ class Ball {
 		if (modifier <= 5) {
 			this.radios = this.initialBallSize / modifier
 		}
+
 	}
 
 
 	move(speed, angle, initialX, initialY) {
 
 		this.T ++
+
+		this.spritePosX += this.spritePosX === 28350 ? -28350  : 189
 	
 		this.pos.x =
 			speed * Math.cos((-angle * Math.PI) / 180) * this.T +
@@ -119,4 +127,32 @@ class Ball {
 		this.pos.y += this.T  * this.g * 0.5
 	}
 
+
+	
+	
+	drawSprite(framesCounter) {
+		
+		/* this.image = new Image()
+		this.image.src = '../IMAGES/BASKETBAL_BALL_SPRITE_189.png' */
+
+		this.ctx.drawImage(
+			this.image, 
+			this.spritePosX, //posicion en la que empieza a dibujar el frame (x)
+			0, //posicion en la que empieza a dibujar el frame (y)
+			189, //posicion en la que acaba de dibujar el frame x
+			189, //posicion en la que acaba de dibujar el frame y
+			this.pos.x, //posx
+			this.pos.y, //posy
+			this.radios, //ancho del frame
+			this.radios //alto del frame
+			)
+		//this.ctx.drawImage(this.image, this.spritePosX, 0, 189, 189, this.pos.initialX, this.pos.initialY, this.initiaBallSize, this.initiaBallSize)
+			
+		//this.animateSprite()
+	}
+	
+
+
+
 }
+	

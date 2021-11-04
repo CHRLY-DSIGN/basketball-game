@@ -12,6 +12,7 @@ const basicGame = {
 	collided: false,
 	collidedBoard: false,
 	collidedBasketLeft: false,
+	score: 0,
 
 	init() {
 		this.setContext()
@@ -20,6 +21,7 @@ const basicGame = {
 		this.createElements()
 		this.drawElements()
 		this.start()
+		
 	},
 
 	setContext() {
@@ -56,6 +58,7 @@ const basicGame = {
 
 			this.drawPlayer()
 			this.drawBallStand()
+			this.drawNet()
 
 			if (this.isCollisionBoard()) {
 				//console.log('collision board')
@@ -69,14 +72,26 @@ const basicGame = {
 			}
 
 			if (this.isCollisionBasketRight()) {
-				console.log('GOAAAAAAALLLLLL ---------------------')
-			}
+				//console.log('GOAAAAAAALLLLLL ---------------------')
+				console.log("llegnado ponsicion score");
+				this.scoreCounter()
+			} 
 
 			if (this.isCollisionFloor()) {
 				this.collided = true
 
 				/* console.log('collision floor') */
 			}
+
+
+			if (this.isCanvasCollision()) {
+				//document.location.reload()
+				basicGame.init();
+				this.resetBall();
+				
+			}
+
+
 		}, 1000 / this.FPS)
 		this.framesCounter > 50 ? clearInterval(this.intervalId) : null
 	},
@@ -99,6 +114,8 @@ const basicGame = {
 		this.createCollisionBasketLeft()
 		this.createCollisionBasketRight()
 		this.createCollisionFloor()
+		this.createNet()
+		this.createScoreboard()
 	},
 
 	drawElements() {
@@ -111,6 +128,8 @@ const basicGame = {
 		this.drawCollisionBasketLeft()
 		this.drawCollisionBasketRight()
 		this.drawCollisionFloor()
+		this.drawNet()
+		this.drawScoreboard()
 	},
 
 	createBackground() {
@@ -163,7 +182,7 @@ const basicGame = {
 
 
 	createCollisionBoard() {
-		this.collisionBoard = new CollisionBoard(this.ctx, 1110, 152, 12, 120)
+		this.collisionBoard = new CollisionBoard(this.ctx, 1110, 152, 2, 120)
 	},
 
 
@@ -182,7 +201,7 @@ const basicGame = {
 
 
 	createCollisionBasketLeft() {
-		this.collisionBasketLeft = new CollisionBasketLeft(this.ctx, 980, 260, 12, 12)
+		this.collisionBasketLeft = new CollisionBasketLeft(this.ctx, 980, 260, 5, 5)
 	},
 
 
@@ -203,7 +222,7 @@ const basicGame = {
 
 
 	createCollisionBasketRight() {
-		this.collisionBasketRight = new CollisionBasketRight(this.ctx, 1000, 260, 100, 5)
+		this.collisionBasketRight = new CollisionBasketRight(this.ctx, 1040, 340, 20, 2)
 	},
 
 
@@ -215,9 +234,9 @@ const basicGame = {
 	isCollisionBasketRight() {
 
 		return (
-			this.ball.pos.x + this.ball.size.width > this.collisionBasketRight.pos.x && //lado drch del ball lado izq del this.collisionBasketRight
+			this.ball.pos.x + this.ball.size.width > this.collisionBasketRight.pos.x+20 && //lado drch del ball lado izq del this.collisionBasketRight
 			this.ball.pos.x < this.collisionBasketRight.pos.x + this.collisionBasketRight.size.width && //lado izq del ball lado drch del this.collisionBasketRight
-			this.ball.pos.y + this.ball.size.height > this.collisionBasketRight.pos.y && //lado de abajo del ball lado de arriba del this.collisionBasketRight
+			this.ball.pos.y + this.ball.size.height > this.collisionBasketRight.pos.y+20 && //lado de abajo del ball lado de arriba del this.collisionBasketRight
 			this.ball.pos.y < this.collisionBasketRight.pos.y + this.collisionBasketRight.size.height
 		)
 	},
@@ -295,13 +314,65 @@ const basicGame = {
 
 	},
 
+	isCanvasCollision() {
 
-	/* isGoal() {
 		return (
-			this.ball.pos.x + this.ball.size.width > this.collisionBoard.pos.x && //lado drch del ball lado izq del this.collisionBasketRight
-			this.ball.pos.x < this.collisionBasketLeft.pos.x + this.collisionBasketLeft.size.width && //lado izq del ball lado drch del this.collisionBasketRight
-			this.ball.pos.y + this.ball.size.height > this.collisionBasketLeft.pos.y && //lado de abajo del ball lado de arriba del this.collisionBasketRight
-			this.ball.pos.y < this.collisionBasketLeft.pos.y + this.collisionBasketLeft.size.height
+			this.ballBounceAnimation.pos.y + this.ballBounceAnimation.size.height-40 >  1664  //lado de abajo del ball lado de arriba del this.collisionFloor
 		)
-	} */
+	},
+
+
+	createNet() {
+		this.net = new Net(this.ctx, 0, 0, this.canvasSize.width, this.canvasSize.height)
+	},
+
+	drawNet() {
+		this.net.draw()
+	},
+
+
+	createScoreboard() {
+		this.scoreboard = new Scoreboard(this.ctx, 0,0, this.canvasSize.width, this.canvasSize.height)
+	},
+
+
+	drawScoreboard() {
+		this.scoreboard.draw()
+	},
+
+
+	scoreCounter() {
+		this.score++
+		document.querySelector('#score').textContent = this.score
+		document.querySelector('#best-score').textContent = this.score
+		console.log(this.score);
+
+	},
+
+	resetScoreCounter() {
+		this.score = 0
+		document.querySelector('#score').textContent = this.score
+	},
+
+
+	resetBall() {
+		this.ball.angle = undefined
+		this.ball.speed = undefined
+		this.ball.isShooted = false
+		this.ball.radios = radios
+		this.ball.initialBallSize = 123.26
+		this.ball.pos.x = posX
+		this.ball.pos.y = posY
+		this.ball.pos.initialX = 777.57
+		this.ball.pos.initialY = 312
+		this.ball.visible = true
+		this.ball.T = 0
+		this.ball.shooterLogic = new Shooter(this.canvasDOM, this.shoot.bind(this))
+		this.ball.secondsPassed = 0
+		this.ball.isEventAdded = false
+
+	},
+
+
+	
 }
